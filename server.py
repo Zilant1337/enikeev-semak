@@ -93,7 +93,7 @@ def main():
             conn.sendall(f"{publicKey[0]},{publicKey[1]}".encode())
             print("Сервер отослал публичный ключ")
             encryptedMessage = conn.recv(4096)
-            print(f"Получено сообщение.")
+            print(f"Получено сообщение")
             encryptedBlocks = list(map(int, encryptedMessage.decode().split(',')))
             decryptedMessage = Decrypt(privateKey, encryptedBlocks)
             print(f"Расшифрованное сообщение: {decryptedMessage}")
