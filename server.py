@@ -25,7 +25,7 @@ def EGCD(a, b):
 def MulInv(e, phi):
     g, x, y = EGCD(e, phi)
     if g != 1:
-        raise Exception('Обратного элемента не существует.')
+        raise Exception('Обратного элемента нет.')
     else:
         return x % phi
 def MillerRabinPrimalityTest(d, n):
