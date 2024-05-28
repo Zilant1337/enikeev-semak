@@ -26,15 +26,16 @@ def main():
     port = 11111
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as clientSocket:
         clientSocket.connect((hostip, port))
-
         publicKeyData = clientSocket.recv(1024).decode()
         e, n = map(int, publicKeyData.split(','))
         publicKey = (e, n)
 
-        message = "Очень длинная строка в UTF8 на 100 символов, включая спец символы вроде 1@#$%^&*()_-+=[]\\/<> и прочие..."
+        message = "Блаблаблабла тестовый текст 12332158798921658912 ()#$%^&*_-+=[]\\/<>@ смешные символы"
         encryptedMessage = Encrypt(publicKey, message)
+        print("Сообщение зашифровано")
         encryptedMessageString = ','.join(map(str, encryptedMessage))
         clientSocket.sendall(encryptedMessageString.encode())
+        print("Сообщение отправлено на сервер")
 
 if __name__ == "__main__":
     main()

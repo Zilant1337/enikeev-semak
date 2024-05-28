@@ -70,7 +70,6 @@ def GenerateKeys(k):
     while GCD(e, phi) != 1:
         e += 2
     d = MulInv(e, phi)
-    print(f"Публичный ключ=({e}, {n}), Приватный ключ=({d}, {n})")
     return ((e, n), (d, n))
 def Decrypt(pk, text):
     key, n = pk
@@ -80,7 +79,6 @@ def Decrypt(pk, text):
         decryptedBlock = ModPower(encryptedBlock, key, n)
         decryptedBytes.extend(decryptedBlock.to_bytes(blockSize, byteorder='big').lstrip(b'\x00'))
     decryptedText = decryptedBytes.decode('utf-8')
-    print(f"Расшифрованный текст: {decryptedText}")
     return decryptedText
 def main():
     hostip = '127.0.0.1'
@@ -94,12 +92,10 @@ def main():
             print(f"Подключено: {ip}")
             publicKey, privateKey = GenerateKeys(1024)
             print("Сервер сгенерировал ключи")
-            print(f"Публичный ключ сервера: {publicKey}, Приватный ключ сервера: {privateKey}")
-
             conn.sendall(f"{publicKey[0]},{publicKey[1]}".encode())
 
             encryptedMessage = conn.recv(4096)
-            print(f"Получено сообщение: {encryptedMessage.decode()}")
+            print(f"Получено сообщение!")
             encryptedBlocks = list(map(int, encryptedMessage.decode().split(',')))
             decryptedMessage = Decrypt(privateKey, encryptedBlocks)
             print(f"Расшифрованное сообщение: {decryptedMessage}")
