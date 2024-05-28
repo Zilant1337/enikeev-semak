@@ -65,7 +65,7 @@ def GenerateKeys(k):
         q = GeneratePrimeNumber(k)
     n = p * q
     phi = (p - 1) * (q - 1)
-    e = 3
+    e = 65537 # https://www.openssl.org/docs/man3.1/man7/RSA.html
 
     while GCD(e, phi) != 1:
         e += 2
@@ -81,21 +81,19 @@ def Decrypt(pk, text):
     decryptedText = decryptedBytes.decode('utf-8')
     return decryptedText
 def main():
-    hostip = '127.0.0.1'
-    port = 11111
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as serverSocket:
-        serverSocket.bind((hostip, port))
+        serverSocket.bind(('127.0.0.1', 11111))
         serverSocket.listen()
-        print(f"Сервер ожидает ввода {hostip}:{port}")
+        print(f"Сервер ожидает ввода 127.0.0.1:11111")
         conn, ip = serverSocket.accept()
         with conn:
             print(f"Подключено: {ip}")
-            publicKey, privateKey = GenerateKeys(1024)
+            publicKey, privateKey = GenerateKeys(512)
             print("Сервер сгенерировал ключи")
             conn.sendall(f"{publicKey[0]},{publicKey[1]}".encode())
-
+            print("Сервер отослал публичный ключ")
             encryptedMessage = conn.recv(4096)
-            print(f"Получено сообщение!")
+            print(f"Получено сообщение.")
             encryptedBlocks = list(map(int, encryptedMessage.decode().split(',')))
             decryptedMessage = Decrypt(privateKey, encryptedBlocks)
             print(f"Расшифрованное сообщение: {decryptedMessage}")

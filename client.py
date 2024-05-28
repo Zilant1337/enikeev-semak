@@ -22,14 +22,14 @@ def Encrypt(pk, text):
         encryptedBlocks.append(encrypted_block)
     return encryptedBlocks
 def main():
-    hostip = '127.0.0.1'
-    port = 11111
+
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as clientSocket:
-        clientSocket.connect((hostip, port))
-        publicKeyData = clientSocket.recv(1024).decode()
+        clientSocket.connect(('127.0.0.1', 11111))
+        print("Подключено к серверу")
+        publicKeyData = clientSocket.recv(512).decode()
+        print("Получен публичный ключ")
         e, n = map(int, publicKeyData.split(','))
         publicKey = (e, n)
-
         message = "Блаблаблабла тестовый текст 12332158798921658912 ()#$%^&*_-+=[]\\/<>@ смешные символы"
         encryptedMessage = Encrypt(publicKey, message)
         print("Сообщение зашифровано")
